@@ -1,7 +1,11 @@
-controllers:
-    resource: ../src/Controller/
-    type: annotation
+customers_controllers:
+    resource: 
+        path: ../src/Customers/Controller/
+        namespace: App\Customers\Controller
+    type: attribute
 
-kernel:
-    resource: ../src/Kernel.php
-    type: annotation
+artists_controllers:
+    resource: 
+        path: ../src/Artists/Infrastructure/Symfony/Controller/
+        namespace: App\Artists\Infrastructure\Symfony\Controller
+    type: attribute

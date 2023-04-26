@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Artists\Infrastructure\Symfony\Controller;
 
-use App\Entity\Song;
-use App\Form\SongType;
-use App\Repository\SongRepository;
+use App\Artists\Domain\Entity\Song;
+use App\Artists\Infrastructure\Symfony\Form\SongType;
+use App\Artists\Domain\Repository\SongRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +60,7 @@ class SongController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $songRepository->save($song, true);
 
-            return $this->redirectToRoute('app_song_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_homepage', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('song/edit.html.twig', [

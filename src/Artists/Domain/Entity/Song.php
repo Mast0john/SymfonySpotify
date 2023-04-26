@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Artists\Domain\Entity;
 
-use App\Repository\SongRepository;
+use App\Domain\Repository\SongRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace App\Customers\Controller;
 
-use App\Entity\User;
-use App\Form\RegistrationFormType;
-use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
-use App\Security\UserAuthenticator;
+use App\Customers\Entity\User;
+use App\Customers\Form\RegistrationFormType;
+use App\Customers\Message\UserRegistration;
+use App\Customers\Repository\UserRepository;
+use App\Customers\Security\EmailVerifier;
+use App\Customers\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,13 +19,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class RegistrationController extends AbstractController
 {
 
-    public function __construct(EmailVerifier $emailVerifier, private MessageBusInterface $messageBus)
+    public function __construct(private EmailVerifier $emailVerifier, private MessageBusInterface $messageBus)
     {
-
+        $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/register', name: 'app_register')]
@@ -35,24 +37,13 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
 
-            if ($form->get('artist')->getData()) {
-                $user->setRoles(['ROLE_ARTIST',...$user->getRoles()]);
-            }
-
-            $entityManager->persist($user);
-            $entityManager->flush();
+            // $entityManager->persist($user);
+            // $entityManager->flush();
 
             // TODO dispatch message
 
-            $this->messageBus->dispatch(new UserRegistration($user));
+            $this->messageBus->dispatch(new UserRegistration($user,$form));
 
             return $userAuthenticator->authenticateUser(
                 $user,
