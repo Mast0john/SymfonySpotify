@@ -2,9 +2,11 @@
 
 namespace App\Artists\Domain\Entity;
 
-use App\Domain\Repository\SongRepository;
+use App\Artists\Domain\Repository\SongRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 class Song
@@ -24,6 +26,19 @@ class Song
     private ?string $filePath = null;
 
     private ?File $file = null;
+
+    #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'songs')]
+    private Collection $artists;
+
+    #[ORM\ManyToMany(targetEntity: Album::class, mappedBy: 'songs')]
+    private Collection $albums;
+
+    
+    public function __construct()
+    {
+        $this->artists = new ArrayCollection();
+        $this->albums = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -54,18 +69,6 @@ class Song
         return $this;
     }
 
-    public function getFile(): ?string
-    {
-        return $this->file;
-    }
-
-    public function setFile(file $file): self
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
     public function getFilePath(): ?string
     {
         return $this->filePath;
@@ -74,6 +77,70 @@ class Song
     public function setFilePath(string $filePath): self
     {
         $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|null $file
+     */
+    public function setFile(?File $file): void
+    {
+        $this->file = $file;
+    }
+
+    public function getArtists(): ?Collection
+    {
+        return $this->artists;
+    }
+
+    public function addArtist(Artist $artist): self
+    {
+        if (!$this->artists->contains($artist)) {
+            $this->artists->add($artist);
+            $artist->addSong($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtist(Artist $artist): self
+    {
+        if ($this->artists->removeElement($artist)) {
+            $artist->removeSong($this);
+        }
+
+        return $this;
+    }
+
+    public function getAlbums(): Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): self
+    {
+        if (!$this->albums->contains($album)) {
+            $this->albums->add($album);
+            $album->addSong($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): self
+    {
+        if ($this->albums->removeElement($album)) {
+            $album->removeSong($this);
+        }
 
         return $this;
     }

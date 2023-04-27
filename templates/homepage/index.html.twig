@@ -22,15 +22,24 @@
     {% endif %}
 
     <div class="flex flex-row">
-        <div class="basis-1/4">
-            <h2>Playlists</h2>
-        </div>
-        <div class="basis-3/4">
+        <div class="basis-1/4"></div>
+        <div class="md-3">
             {{ render(controller('App\\Artists\\Infrastructure\\Symfony\\\Controller\\SongController::index')) }}
         </div>
     </div>
+    <div class="flex flex-row">
+        <div class="basis-1/4"></div>
+        <div class="md-3">
+            {{ render(controller('App\\Artists\\Infrastructure\\Symfony\\Controller\\AlbumController::index')) }}
+        </div>
+    </div>
+    <div class="flex flex-row">
+        <div class="basis-1/4"></div>
+        <div class="md-3">
+            {{ render(controller('App\\Artists\\Infrastructure\\Symfony\\Controller\\PlaylistController::index')) }}
+        </div>
+    </div>
     
-
 
     <!-- logo --> 
     <!-- recherche --> 

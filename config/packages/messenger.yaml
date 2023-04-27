@@ -21,4 +21,8 @@ framework:
             # Symfony\Component\Notifier\Message\SmsMessage: async
 
             # Route your messages to the transports
-            App\Customers\Message\UserRegistration: sync
+            App\Customers\Application\Message\UserRegistration: sync
+            App\Customers\Application\Message\FindUserQuery: sync
+            App\Customers\Application\Message\VerifyUserEmail: sync
+
+

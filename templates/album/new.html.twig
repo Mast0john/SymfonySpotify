@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Album{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouvel album </h1>
+
+    {{ include('album/_form.html.twig') }}
+
+    <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" href="{{ path('app_homepage') }}">back to list</a>
+{% endblock %}
